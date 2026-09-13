@@ -1,0 +1,89 @@
+.restaurant-page {}
+
+/* Hero */
+.rp-hero {
+  position: relative;
+  height: 280px;
+  overflow: hidden;
+}
+.rp-hero-img { width: 100%; height: 100%; object-fit: cover; }
+.rp-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.2) 60%, transparent 100%);
+}
+.rp-back-btn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(4px);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: 1px solid rgba(255,255,255,0.2);
+  transition: all var(--transition);
+}
+.rp-back-btn:hover { background: rgba(0,0,0,0.6); }
+
+.rp-hero-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20px 24px;
+}
+.rp-hero-name { font-size: 28px; font-weight: 900; color: #FFFFFF; margin-bottom: 4px; }
+.rp-hero-cuisine { font-size: 14px; color: rgba(255,255,255,0.75); margin-bottom: 10px; font-weight: 500; }
+.rp-hero-meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.rp-hero-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #FEF3C7;
+  color: #D97706;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 3px 9px;
+  border-radius: 6px;
+}
+.rp-hero-chip {
+  background: rgba(255,255,255,0.18);
+  backdrop-filter: blur(4px);
+  color: #FFFFFF;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+/* Body */
+.rp-body { padding-top: 24px; padding-bottom: 48px; }
+.rp-controls { margin-bottom: 20px; }
+.rp-search { margin-bottom: 14px; }
+.rp-cats { display: flex; gap: 10px; flex-wrap: wrap; }
+
+.rp-menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 22px;
+}
+.rp-menu-grid .food-card {
+  width: 100% !important;
+  max-width: 100%;
+}
+
+.rp-empty { text-align: center; padding: 60px 20px; }
+.rp-empty h3 { font-size: 18px; font-weight: 800; color: var(--text-primary); margin-bottom: 8px; }
+.rp-empty p { color: var(--text-secondary); margin-bottom: 20px; }
+
+.menu-empty { text-align: center; padding: 48px 20px; color: var(--text-secondary); }
+.menu-empty-icon { font-size: 48px; margin-bottom: 12px; }
+.menu-empty h3 { font-size: 18px; font-weight: 800; color: var(--text-primary); margin-bottom: 6px; }
+.menu-empty p { font-size: 14px; }

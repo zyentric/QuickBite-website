@@ -1,15 +1,19 @@
 .food-card {
-  width: 200px;
+  width: 224px;
   flex-shrink: 0;
   cursor: pointer;
   transition: all var(--transition);
+  display: flex;
+  flex-direction: column;
 }
 .food-card:focus { outline: 2px solid var(--color-primary); outline-offset: 2px; }
+.food-card:hover { transform: translateY(-4px); box-shadow: 0 10px 24px rgba(0,0,0,0.08); }
 
 .food-card-img-wrap {
   position: relative;
-  height: 130px;
+  height: 140px;
   overflow: hidden;
+  background: #FFF4EB;
 }
 .food-card-img {
   width: 100%;

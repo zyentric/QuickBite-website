@@ -1,0 +1,57 @@
+.orders-page {}
+.orders-body { padding-top: 32px; padding-bottom: 60px; }
+
+.orders-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 28px; }
+.orders-title { font-size: 28px; font-weight: 900; color: var(--text-primary); }
+.orders-sub { font-size: 14px; color: var(--text-secondary); margin-top: 3px; font-weight: 500; }
+
+.orders-empty { text-align: center; padding: 60px 20px; }
+.orders-empty-icon { font-size: 56px; margin-bottom: 14px; }
+.orders-empty h2 { font-size: 22px; font-weight: 800; color: var(--text-primary); margin-bottom: 6px; }
+.orders-empty p { font-size: 14px; color: var(--text-secondary); margin-bottom: 24px; }
+
+.orders-list { display: flex; flex-direction: column; gap: 14px; }
+
+.order-card {
+  background: #FFFFFF;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-card);
+  padding: 18px 20px;
+  box-shadow: var(--shadow-card);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.order-card:hover { box-shadow: var(--shadow-card-hover); transform: translateY(-1px); border-color: #E0E0E0; }
+
+.order-card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+.order-id { font-size: 15px; font-weight: 800; color: var(--text-primary); }
+.order-date { font-size: 12px; color: var(--text-secondary); margin-top: 2px; font-weight: 500; }
+.order-status-badge {
+  font-size: 11px;
+  font-weight: 800;
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+}
+
+.order-card-items { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+.order-item-name {
+  background: var(--bg-surface);
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+}
+.order-item-more { font-size: 12px; color: var(--text-muted); font-weight: 500; }
+
+.order-card-bottom { display: flex; justify-content: space-between; align-items: center; }
+.order-total { font-size: 18px; font-weight: 900; color: var(--color-primary); }
+.order-view-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-primary);
+}

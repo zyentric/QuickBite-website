@@ -1,10 +1,17 @@
-import React from 'react';
+import { useState, useEffect, type MouseEvent } from 'react';
 import type { MenuItem } from '../../types';
 import { useCart } from '../../context/CartContext';
 import { useToast } from '../../context/ToastContext';
 import './FoodCard.css';
 
-const FALLBACK = 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?q=80&w=400&auto=format&fit=crop';
+const CATEGORY_IMAGES: Record<string, string> = {
+  Meal: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=400&auto=format&fit=crop',
+  Snacks: 'https://images.unsplash.com/photo-1562967914-608f82629710?q=80&w=400&auto=format&fit=crop',
+  Dessert: 'https://images.unsplash.com/photo-1551024506-0bccd828d307?q=80&w=400&auto=format&fit=crop',
+  Drinks: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?q=80&w=400&auto=format&fit=crop',
+  Vegan: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=400&auto=format&fit=crop',
+};
+const FALLBACK = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=400&auto=format&fit=crop';
 
 interface FoodCardProps {
   item: MenuItem;
@@ -15,21 +22,28 @@ export default function FoodCard({ item, onPress }: FoodCardProps) {
   const { addToCart, cartItems, updateQuantity } = useCart();
   const { showToast } = useToast();
 
+  const defaultImg = (item.category && CATEGORY_IMAGES[item.category]) || FALLBACK;
+  const [imgSrc, setImgSrc] = useState(item.image || defaultImg);
+
+  useEffect(() => {
+    setImgSrc(item.image || defaultImg);
+  }, [item.image, defaultImg]);
+
   const cartItem = cartItems.find(i => i.id === item.id || i._id === item._id);
   const qty = cartItem?.quantity || 0;
 
-  const handleAdd = (e: React.MouseEvent) => {
+  const handleAdd = (e: MouseEvent) => {
     e.stopPropagation();
     addToCart(item);
     showToast(`${item.name} added to cart!`, 'success');
   };
 
-  const handleIncrease = (e: React.MouseEvent) => {
+  const handleIncrease = (e: MouseEvent) => {
     e.stopPropagation();
     updateQuantity(item.id || item._id!, qty + 1);
   };
 
-  const handleDecrease = (e: React.MouseEvent) => {
+  const handleDecrease = (e: MouseEvent) => {
     e.stopPropagation();
     updateQuantity(item.id || item._id!, qty - 1);
   };
@@ -41,10 +55,12 @@ export default function FoodCard({ item, onPress }: FoodCardProps) {
       {/* Image */}
       <div className="food-card-img-wrap">
         <img
-          src={item.image || FALLBACK}
+          src={imgSrc}
           alt={item.name}
           className="food-card-img"
-          onError={e => { (e.target as HTMLImageElement).src = FALLBACK; }}
+          onError={() => {
+            if (imgSrc !== defaultImg) setImgSrc(defaultImg);
+          }}
           loading="lazy"
         />
         {/* Rating badge */}

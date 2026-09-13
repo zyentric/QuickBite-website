@@ -1,0 +1,165 @@
+.fdp-page {}
+
+/* Hero */
+.fdp-hero {
+  position: relative;
+  height: 320px;
+  overflow: hidden;
+}
+.fdp-hero-img { width: 100%; height: 100%; object-fit: cover; }
+.fdp-back, .fdp-fav {
+  position: absolute;
+  top: 20px;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(4px);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: 1px solid rgba(255,255,255,0.2);
+  transition: all var(--transition);
+}
+.fdp-back { left: 20px; }
+.fdp-fav { right: 20px; }
+.fdp-back:hover, .fdp-fav:hover { background: rgba(0,0,0,0.6); }
+.fdp-fav.active { background: #FFF; color: #EF4444; }
+
+.fdp-hero-badges {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  display: flex;
+  gap: 8px;
+}
+.fdp-dietary {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255,255,255,0.9);
+  backdrop-filter: blur(4px);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1.5px solid;
+}
+.fdp-dietary.veg { border-color: #16A34A; color: #16A34A; }
+.fdp-dietary.non-veg { border-color: #DC2626; color: #DC2626; }
+.fdp-dietary .dietary-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+.fdp-dietary.veg .dietary-dot { background: #16A34A; }
+.fdp-dietary.non-veg .dietary-dot { background: #DC2626; }
+
+.fdp-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--color-primary);
+  color: #FFFFFF;
+  font-size: 11px;
+  font-weight: 900;
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+
+/* Body */
+.fdp-body { padding: 24px 0 40px; max-width: 680px; }
+
+.fdp-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+.fdp-name { font-size: 26px; font-weight: 900; color: var(--text-primary); line-height: 1.2; }
+.fdp-category {
+  display: inline-block;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  margin-top: 6px;
+}
+.fdp-pricing { text-align: right; flex-shrink: 0; }
+.fdp-price { display: block; font-size: 30px; font-weight: 900; color: var(--color-primary); }
+.fdp-original { font-size: 14px; color: var(--text-muted); text-decoration: line-through; font-weight: 500; }
+
+.fdp-description {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.65;
+  margin-bottom: 18px;
+  font-weight: 500;
+}
+
+.fdp-info-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
+.fdp-info-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #F3F4F6;
+  color: #4B5563;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+}
+
+.fdp-divider { height: 1px; background: var(--border-light); margin-bottom: 24px; }
+
+/* Cart section */
+.fdp-cart-section {}
+.fdp-add-btn { width: 100%; max-width: 400px; font-size: 16px; font-weight: 800; height: 52px; }
+
+.fdp-qty-row { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.fdp-qty-ctrl {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  background: var(--color-primary);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  box-shadow: var(--shadow-btn);
+}
+.fdp-qty-btn {
+  width: 42px;
+  height: 42px;
+  background: none;
+  border: none;
+  color: #FFFFFF;
+  font-size: 22px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--transition);
+  line-height: 1;
+}
+.fdp-qty-btn:hover { background: rgba(0,0,0,0.15); }
+.fdp-qty-num {
+  font-size: 18px;
+  font-weight: 900;
+  color: #FFFFFF;
+  min-width: 36px;
+  text-align: center;
+}
+
+.fdp-empty { text-align: center; padding: 60px 20px; }
+
+@media (max-width: 600px) {
+  .fdp-hero { height: 250px; }
+  .fdp-name { font-size: 22px; }
+  .fdp-price { font-size: 24px; }
+  .fdp-add-btn { max-width: 100%; }
+}

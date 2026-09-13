@@ -1,0 +1,98 @@
+.menu-header-bar {
+  background: linear-gradient(135deg, #E85D22 0%, #D34A12 60%, #B83A07 100%);
+  padding: 40px 0 32px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(232, 93, 34, 0.2);
+}
+.menu-header-title { font-size: 32px; font-weight: 900; color: #FFFFFF; letter-spacing: -0.5px; }
+.menu-header-sub { font-size: 15px; color: rgba(255,255,255,0.85); margin-top: 6px; font-weight: 500; }
+
+.menu-body { padding-top: 28px; padding-bottom: 56px; }
+
+.menu-controls {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.menu-search-wrap {
+  flex: 1;
+  min-width: 260px;
+  position: relative;
+}
+.menu-search-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  pointer-events: none;
+}
+.menu-search { padding-left: 42px; height: 44px; border-radius: var(--radius-md); font-size: 14px; }
+
+.menu-sort { max-width: 180px; height: 44px; }
+
+.menu-view-toggle {
+  display: flex;
+  background: #F3F4F6;
+  border-radius: var(--radius-full);
+  padding: 4px;
+  gap: 0;
+}
+.menu-view-btn {
+  padding: 8px 20px;
+  border-radius: var(--radius-full);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.menu-view-btn.active { background: #FFFFFF; color: var(--text-primary); box-shadow: 0 1px 6px rgba(0,0,0,0.12); }
+
+.menu-cats { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
+
+.menu-count { font-size: 14px; color: var(--text-secondary); font-weight: 600; margin-bottom: 20px; }
+
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 22px;
+}
+.menu-grid .food-card {
+  width: 100% !important;
+  max-width: 100%;
+}
+
+.menu-rest-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 18px;
+}
+.menu-rest-grid .restaurant-card { width: 100%; }
+
+.menu-empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-secondary);
+}
+.menu-empty-icon { font-size: 48px; margin-bottom: 12px; }
+.menu-empty h3 { font-size: 20px; font-weight: 800; color: var(--text-primary); margin-bottom: 6px; }
+.menu-empty p { font-size: 14px; margin-bottom: 20px; }
+
+.visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0);
+  white-space: nowrap; border: 0;
+}
+
+@media (max-width: 600px) {
+  .menu-controls { flex-direction: column; }
+  .menu-search-wrap, .menu-sort { min-width: 100%; max-width: 100%; }
+}

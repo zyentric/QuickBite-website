@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState, type FormEvent } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
@@ -13,7 +13,7 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
 
-  const handleSearch = (e: React.FormEvent) => {
+  const handleSearch = (e: FormEvent) => {
     e.preventDefault();
     if (search.trim()) navigate(`/menu?search=${encodeURIComponent(search.trim())}`);
   };
@@ -25,9 +25,7 @@ export default function Navbar() {
       <div className="navbar-inner">
         {/* Logo */}
         <Link to="/" className="navbar-logo" aria-label="QuickBite Home">
-          <div className="navbar-logo-icon">
-            <span className="navbar-logo-q">Q</span>
-          </div>
+          <img src="/logo.png" alt="QuickBite" className="navbar-logo-img" />
           <span className="navbar-logo-text">Quick<span>Bite</span></span>
         </Link>
 
