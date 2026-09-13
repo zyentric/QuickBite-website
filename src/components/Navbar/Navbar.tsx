@@ -2,6 +2,7 @@ import { useState, type FormEvent } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
+import logoImg from '../../assets/logo.png';
 import './Navbar.css';
 
 export default function Navbar() {
@@ -25,7 +26,7 @@ export default function Navbar() {
       <div className="navbar-inner">
         {/* Logo */}
         <Link to="/" className="navbar-logo" aria-label="QuickBite Home">
-          <img src="/logo.png" alt="QuickBite" className="navbar-logo-img" />
+          <img src={logoImg} alt="QuickBite" className="navbar-logo-img" />
           <span className="navbar-logo-text">Quick<span>Bite</span></span>
         </Link>
 

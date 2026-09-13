@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import logoImg from '../../assets/logo.png';
 import './Footer.css';
 
 export default function Footer() {
@@ -9,7 +10,7 @@ export default function Footer() {
           {/* Brand */}
           <div className="footer-brand">
             <Link to="/" className="footer-logo">
-              <img src="/logo.png" alt="QuickBite" className="footer-logo-img" />
+              <img src={logoImg} alt="QuickBite" className="footer-logo-img" />
               <span className="footer-logo-text">Quick<span>Bite</span></span>
             </Link>
             <p className="footer-tagline">Fresh meals delivered in snaps. Quality food from the best local kitchens, at your doorstep in 20–30 minutes.</p>

@@ -2,6 +2,7 @@ import { useState, type FormEvent } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
+import logoImg from '../../assets/logo.png';
 import './AuthPages.css';
 
 export default function LoginPage() {
@@ -32,7 +33,7 @@ export default function LoginPage() {
     <main id="login-page" className="auth-page">
       <div className="auth-card">
         <Link to="/" className="auth-logo">
-          <img src="/logo.png" alt="QuickBite" className="auth-logo-img" />
+          <img src={logoImg} alt="QuickBite" className="auth-logo-img" />
           <span>Quick<span style={{ color: 'var(--color-primary)' }}>Bite</span></span>
         </Link>
         <h1 className="auth-title">Welcome Back</h1>
