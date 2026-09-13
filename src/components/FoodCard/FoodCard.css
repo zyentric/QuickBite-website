@@ -1,0 +1,172 @@
+.food-card {
+  width: 200px;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.food-card:focus { outline: 2px solid var(--color-primary); outline-offset: 2px; }
+
+.food-card-img-wrap {
+  position: relative;
+  height: 130px;
+  overflow: hidden;
+}
+.food-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+.food-card:hover .food-card-img { transform: scale(1.06); }
+
+/* Rating badge - bottom left (matches app) */
+.food-card-rating {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  background: var(--color-primary);
+  color: #FFFFFF;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 3px 7px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+/* FSSAI dietary indicator - top left */
+.food-card-dietary {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  border-width: 1.5px;
+  border-style: solid;
+  background: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.food-card-dietary.veg { border-color: #16A34A; }
+.food-card-dietary.non-veg { border-color: #DC2626; }
+.dietary-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+.food-card-dietary.veg .dietary-dot { background: #16A34A; }
+.food-card-dietary.non-veg .dietary-dot { background: #DC2626; }
+
+/* Discount badge */
+.food-card-deal-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: #EF4444;
+  color: #FFFFFF;
+  font-size: 9px;
+  font-weight: 900;
+  padding: 2px 6px;
+  border-radius: 5px;
+  letter-spacing: 0.3px;
+}
+
+/* Content */
+.food-card-content { padding: 10px 12px 12px; }
+.food-card-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.food-card-desc {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 500;
+}
+
+.food-card-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.food-card-pricing {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+}
+.food-card-price {
+  font-size: 16px;
+  font-weight: 900;
+  color: var(--color-primary);
+}
+.food-card-original {
+  font-size: 12px;
+  color: var(--text-muted);
+  text-decoration: line-through;
+  font-weight: 500;
+}
+
+/* Add to cart button */
+.food-card-add-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
+  transition: all var(--transition);
+  flex-shrink: 0;
+  box-shadow: 0 3px 8px var(--color-primary-glow);
+}
+.food-card-add-btn:hover { background: var(--color-primary-hover); transform: scale(1.1); }
+
+/* Qty controls */
+.food-card-qty-ctrl {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  background: var(--color-primary);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+.qty-btn {
+  width: 26px;
+  height: 26px;
+  background: none;
+  border: none;
+  color: #FFFFFF;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--transition);
+  line-height: 1;
+}
+.qty-btn:hover { background: rgba(0,0,0,0.15); }
+.qty-num {
+  font-size: 13px;
+  font-weight: 900;
+  color: #FFFFFF;
+  min-width: 20px;
+  text-align: center;
+}
+
+/* Responsive: wider cards on desktop */
+@media (min-width: 1024px) { .food-card { width: 220px; } }
