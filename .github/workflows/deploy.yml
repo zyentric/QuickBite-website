@@ -39,7 +39,7 @@ jobs:
       - name: Build production bundle
         env:
           BASE_URL: '/QuickBite-website/'
-          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL || 'https://quickbite-backend.onrender.com/api' }}
+          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL || 'https://quickbite-backend-sknz.onrender.com/api' }}
         run: |
           npm run build
           # Create 404.html to handle client-side routing on GitHub Pages (SPA fallback)
