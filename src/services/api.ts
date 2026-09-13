@@ -1,6 +1,6 @@
 import type { MenuItem, Restaurant } from '../types';
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL || 'https://quickbite-backend.onrender.com/api';
+const API_BASE = import.meta.env.VITE_API_BASE_URL || 'https://quickbite-backend-sknz.onrender.com/api';
 
 const TOKEN_KEY = 'quickbite_user_token';
 
