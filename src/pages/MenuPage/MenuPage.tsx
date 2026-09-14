@@ -7,9 +7,14 @@ import RestaurantCard from '../../components/RestaurantCard/RestaurantCard';
 import './MenuPage.css';
 
 const CATEGORIES = ['All', 'Meal', 'Snacks', 'Dessert', 'Drinks', 'Vegan'];
+const DIETARY_FILTERS = [
+  { id: 'all', label: 'All Dishes' },
+  { id: 'veg', label: '🌱 Veg Only' },
+  { id: 'non-veg', label: '🍗 Non-Veg' },
+];
 const SORTS = [
   { id: 'default', label: 'Default' },
-  { id: 'top', label: 'Top Rated' },
+  { id: 'top', label: 'Top Rated (4.5+)' },
   { id: 'price_asc', label: 'Price: Low to High' },
   { id: 'price_desc', label: 'Price: High to Low' },
 ];
@@ -25,6 +30,7 @@ export default function MenuPage() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState(initSearch);
   const [category, setCategory] = useState(initCat);
+  const [dietary, setDietary] = useState<'all' | 'veg' | 'non-veg'>('all');
   const [sort, setSort] = useState('default');
   const [view, setView] = useState<'food' | 'restaurant'>('food');
 
@@ -48,11 +54,16 @@ export default function MenuPage() {
     if (category && category !== 'All') {
       items = items.filter(i => (i.category || '').toLowerCase().includes(category.toLowerCase()));
     }
+    if (dietary === 'veg') {
+      items = items.filter(i => i.isVeg === true || (i.category || '').toLowerCase().includes('veg'));
+    } else if (dietary === 'non-veg') {
+      items = items.filter(i => i.isVeg === false || (!(i.category || '').toLowerCase().includes('veg') && !(i.category || '').toLowerCase().includes('vegan')));
+    }
     if (sort === 'top') items.sort((a, b) => (b.rating || 0) - (a.rating || 0));
     if (sort === 'price_asc') items.sort((a, b) => a.price - b.price);
     if (sort === 'price_desc') items.sort((a, b) => b.price - a.price);
     return items;
-  }, [menuItems, search, category, sort]);
+  }, [menuItems, search, category, dietary, sort]);
 
   const filteredRestaurants = useMemo(() => {
     if (!search.trim()) return restaurants;
@@ -105,21 +116,38 @@ export default function MenuPage() {
           </div>
         </div>
 
-        {/* Category Filter Chips */}
+        {/* Category & Dietary Filter Chips */}
         {view === 'food' && (
-          <div className="menu-cats">
-            {CATEGORIES.map(c => (
-              <button
-                key={c}
-                id={`menu-cat-${c.toLowerCase()}`}
-                className={`chip ${category === c ? 'active' : ''}`}
-                onClick={() => setCategory(c)}
-                aria-pressed={category === c}
-              >
-                {c}
-              </button>
-            ))}
-          </div>
+          <>
+            <div className="menu-dietary-chips" style={{ display: 'flex', gap: '8px', marginBottom: '12px', flexWrap: 'wrap' }}>
+              {DIETARY_FILTERS.map(df => (
+                <button
+                  key={df.id}
+                  id={`menu-dietary-${df.id}`}
+                  className={`chip ${dietary === df.id ? 'active' : ''}`}
+                  onClick={() => setDietary(df.id as any)}
+                  aria-pressed={dietary === df.id}
+                  style={dietary === df.id ? { backgroundColor: df.id === 'veg' ? '#16A34A' : df.id === 'non-veg' ? '#DC2626' : undefined, color: '#FFFFFF', borderColor: 'transparent' } : undefined}
+                >
+                  {df.label}
+                </button>
+              ))}
+            </div>
+
+            <div className="menu-cats">
+              {CATEGORIES.map(c => (
+                <button
+                  key={c}
+                  id={`menu-cat-${c.toLowerCase()}`}
+                  className={`chip ${category === c ? 'active' : ''}`}
+                  onClick={() => setCategory(c)}
+                  aria-pressed={category === c}
+                >
+                  {c}
+                </button>
+              ))}
+            </div>
+          </>
         )}
 
         {/* Results count */}
