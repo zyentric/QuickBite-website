@@ -1,6 +1,7 @@
 import { useState, useEffect, type MouseEvent } from 'react';
 import type { MenuItem } from '../../types';
-import { useCart } from '../../context/CartContext';
+import { useCart, getItemKey } from '../../context/CartContext';
+import { useFavorites } from '../../context/FavoritesContext';
 import { useToast } from '../../context/ToastContext';
 import './FoodCard.css';
 
@@ -19,8 +20,12 @@ interface FoodCardProps {
 }
 
 export default function FoodCard({ item, onPress }: FoodCardProps) {
-  const { addToCart, cartItems, updateQuantity } = useCart();
+  const { addToCart, getItemQuantity, updateQuantity } = useCart();
+  const { isFavorite, toggleFavorite } = useFavorites();
   const { showToast } = useToast();
+
+  const itemId = getItemKey(item);
+  const isFav = isFavorite(itemId);
 
   const defaultImg = (item.category && CATEGORY_IMAGES[item.category]) || FALLBACK;
   const [imgSrc, setImgSrc] = useState(item.image || defaultImg);
@@ -29,8 +34,7 @@ export default function FoodCard({ item, onPress }: FoodCardProps) {
     setImgSrc(item.image || defaultImg);
   }, [item.image, defaultImg]);
 
-  const cartItem = cartItems.find(i => i.id === item.id || i._id === item._id);
-  const qty = cartItem?.quantity || 0;
+  const qty = getItemQuantity(item);
 
   const handleAdd = (e: MouseEvent) => {
     e.stopPropagation();
@@ -40,12 +44,18 @@ export default function FoodCard({ item, onPress }: FoodCardProps) {
 
   const handleIncrease = (e: MouseEvent) => {
     e.stopPropagation();
-    updateQuantity(item.id || item._id!, qty + 1);
+    if (itemId) updateQuantity(itemId, qty + 1);
   };
 
   const handleDecrease = (e: MouseEvent) => {
     e.stopPropagation();
-    updateQuantity(item.id || item._id!, qty - 1);
+    if (itemId) updateQuantity(itemId, qty - 1);
+  };
+
+  const handleToggleFav = async (e: MouseEvent) => {
+    e.stopPropagation();
+    await toggleFavorite(item);
+    showToast(isFav ? `${item.name} removed from favorites` : `${item.name} added to favorites! ❤️`, 'info');
   };
 
   const isVeg = item.isVeg ?? (item.category || '').toLowerCase().includes('veg');
@@ -72,6 +82,16 @@ export default function FoodCard({ item, onPress }: FoodCardProps) {
         <div className={`food-card-dietary ${isVeg ? 'veg' : 'non-veg'}`}>
           <div className="dietary-dot" />
         </div>
+        {/* Heart Favorite Button */}
+        <button
+          className={`food-card-fav-btn ${isFav ? 'active' : ''}`}
+          onClick={handleToggleFav}
+          aria-label={isFav ? 'Remove from favorites' : 'Add to favorites'}
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill={isFav ? '#EF4444' : 'none'} stroke={isFav ? '#EF4444' : '#1E293B'} strokeWidth="2.2">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+          </svg>
+        </button>
         {/* Discount badge */}
         {item.discountBadge && <div className="food-card-deal-badge">{item.discountBadge}</div>}
       </div>

@@ -68,7 +68,7 @@
 .food-card-deal-badge {
   position: absolute;
   top: 8px;
-  right: 8px;
+  right: 38px;
   background: #EF4444;
   color: #FFFFFF;
   font-size: 9px;
@@ -76,6 +76,34 @@
   padding: 2px 6px;
   border-radius: 5px;
   letter-spacing: 0.3px;
+}
+
+/* Heart favorite button - top right */
+.food-card-fav-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(4px);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  padding: 0;
+  z-index: 2;
+}
+.food-card-fav-btn:hover {
+  transform: scale(1.15);
+  background: #FFFFFF;
+}
+.food-card-fav-btn.active {
+  background: #FFF1F2;
 }
 
 /* Content */

@@ -1,0 +1,24 @@
+/* ── Review Page ──────────────────────────────────────────────────────────── */
+.review-page { min-height: 100vh; background: var(--color-bg); padding: 40px 0 80px; }
+.review-body { max-width: 560px; }
+.review-card { background: #fff; border-radius: 24px; padding: 36px; box-shadow: 0 4px 20px rgba(0,0,0,0.07); }
+.review-back-btn { display: flex; align-items: center; gap: 6px; background: none; border: none; color: var(--color-text-2); font-weight: 600; cursor: pointer; font-size: 0.9rem; margin-bottom: 24px; padding: 0; }
+.review-back-btn:hover { color: var(--color-primary); }
+.review-title { font-size: 1.6rem; font-weight: 900; color: var(--color-text); margin: 0 0 6px; }
+.review-sub { color: var(--color-text-2); margin-bottom: 28px; }
+
+.review-stars-section { text-align: center; margin-bottom: 28px; }
+.review-stars { display: flex; justify-content: center; gap: 8px; margin-bottom: 10px; }
+.review-star { background: none; border: none; font-size: 2.8rem; cursor: pointer; color: #E5E7EB; transition: all 0.15s; line-height: 1; padding: 0; }
+.review-star.active { color: var(--color-primary); transform: scale(1.1); }
+.review-star:hover { transform: scale(1.2); }
+.review-rating-label { font-size: 0.9rem; font-weight: 600; color: var(--color-text-2); height: 20px; }
+
+.review-field { margin-bottom: 24px; }
+.review-label { display: block; font-weight: 600; color: var(--color-text); margin-bottom: 8px; font-size: 0.9rem; }
+.review-textarea { width: 100%; resize: vertical; min-height: 100px; }
+.review-submit-btn { width: 100%; padding: 14px; font-weight: 700; font-size: 1rem; }
+.review-success { text-align: center; padding: 48px; }
+.review-success-icon { font-size: 3rem; margin-bottom: 16px; }
+.review-success h2 { color: var(--color-text); margin-bottom: 8px; }
+.review-success p { color: var(--color-text-2); margin-bottom: 24px; }

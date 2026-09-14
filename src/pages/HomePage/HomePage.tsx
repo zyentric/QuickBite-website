@@ -8,9 +8,50 @@ import './HomePage.css';
 
 // ── Constants ──────────────────────────────────────────────────────────────
 const BANNERS = [
-  { id: 'b1', image: 'https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?q=80&w=1200&auto=format&fit=crop', tag: 'FLAT 30% OFF', text: 'Experience our delicious Chef Specials today!', subtext: 'Code: QUICK30 | Min order ₹199' },
-  { id: 'b2', image: 'https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?q=80&w=1200&auto=format&fit=crop', tag: 'BUY 1 GET 1', text: 'Taco & Burger Fiesta — Buy 1 Get 1 Free!', subtext: 'Free instant contactless delivery' },
-  { id: 'b3', image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?q=80&w=1200&auto=format&fit=crop', tag: 'NEW ARRIVALS', text: 'Fresh Additions to Our Premium Menu', subtext: 'First order discount available' },
+  {
+    id: 'b1',
+    image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=1200&auto=format&fit=crop',
+    tag: 'FLAT 30% OFF',
+    title: 'Experience Delicious Chef Specials Today!',
+    subtext: 'Handcrafted artisan pizzas, loaded crusts & sides.',
+    coupon: 'QUICK30',
+    minOrder: 'Min order ₹199',
+    cta: 'Order Specials Now',
+    link: '/menu?search=Pizza',
+  },
+  {
+    id: 'b2',
+    image: 'https://images.unsplash.com/photo-1550547660-d9450f859349?q=80&w=1200&auto=format&fit=crop',
+    tag: 'BUY 1 GET 1 FREE',
+    title: 'Taco, Burger & Gourmet Shake Fiesta!',
+    subtext: 'Double the flavor, half the bill on selected picks.',
+    coupon: 'BOGO24',
+    minOrder: 'Valid on 20+ restaurants',
+    cta: 'Claim BOGO Offer',
+    link: '/menu?search=Burger',
+  },
+  {
+    id: 'b3',
+    image: 'https://images.unsplash.com/photo-1551024709-8f23befc6f87?q=80&w=1200&auto=format&fit=crop',
+    tag: 'SWEET CRAVINGS • 40% OFF',
+    title: 'Dessert Indulgence & Bakery Treats',
+    subtext: 'Cakes, waffles, brownie sundaes & cold brews.',
+    coupon: 'SWEET40',
+    minOrder: 'Instant Doorstep Delivery',
+    cta: 'Explore Sweets',
+    link: '/menu?search=Dessert',
+  },
+  {
+    id: 'b4',
+    image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?q=80&w=1200&auto=format&fit=crop',
+    tag: 'EXPRESS DELIVERY',
+    title: 'Late Night Munchies & Express Meals',
+    subtext: 'Hot & fresh food delivered to your door in 20 mins.',
+    coupon: 'EXPRESS20',
+    minOrder: 'No minimum order required',
+    cta: 'Order Express Now',
+    link: '/menu',
+  },
 ];
 
 const CRAVINGS = [
@@ -31,9 +72,54 @@ const FILTERS = [
 ];
 
 const TRUST_ITEMS = [
-  { id: 'delivery', icon: '🚀', title: 'Superfast Delivery', sub: '20–30 mins • Live GPS Tracking', tag: 'LIGHTNING FAST', tagBg: '#FEF3C7', tagColor: '#D97706', iconBg: '#FFF4EB' },
-  { id: 'safe', icon: '🛡️', title: '100% Safe & Clean', sub: 'FSSAI Certified • Tamper-proof packaging', tag: 'HYGIENIC', tagBg: '#DCFCE7', tagColor: '#16A34A', iconBg: '#ECFDF5' },
-  { id: 'pay', icon: '💳', title: 'Easy & Secure Pay', sub: 'UPI, Cards, COD • Instant Refund', tag: 'ZERO HASSLE', tagBg: '#DBEAFE', tagColor: '#2563EB', iconBg: '#EFF6FF' },
+  {
+    id: 'delivery',
+    icon: '🚀',
+    title: 'Lightning 20–30 Mins Delivery',
+    sub: 'Real-time GPS tracking from the hot kitchen straight to your doorstep with zero delays.',
+    stat: '⚡ Avg 24 mins',
+    tag: 'REAL-TIME GPS',
+    tagBg: '#FEF3C7',
+    tagColor: '#B45309',
+    iconBg: '#FFF7ED',
+    borderGlow: 'rgba(245, 158, 11, 0.25)',
+  },
+  {
+    id: 'safe',
+    icon: '🛡️',
+    title: '100% Safe & Certified Clean',
+    sub: 'FSSAI verified kitchen hygiene standards, tamper-evident safety seals & contactless handoff.',
+    stat: '⭐ FSSAI Certified',
+    tag: 'HYGIENIC & SEALED',
+    tagBg: '#DCFCE7',
+    tagColor: '#15803D',
+    iconBg: '#ECFDF5',
+    borderGlow: 'rgba(34, 197, 94, 0.25)',
+  },
+  {
+    id: 'pay',
+    icon: '💳',
+    title: 'Instant & Secure Payments',
+    sub: 'Encrypted 1-tap checkout via UPI (GPay, PhonePe, Paytm), Cards, NetBanking, and COD with instant refunds.',
+    stat: '🔒 256-Bit SSL',
+    tag: 'INSTANT REFUND',
+    tagBg: '#DBEAFE',
+    tagColor: '#1D4ED8',
+    iconBg: '#EFF6FF',
+    borderGlow: 'rgba(59, 130, 246, 0.25)',
+  },
+  {
+    id: 'fresh',
+    icon: '🌿',
+    title: 'Farm Fresh Organic Ingredients',
+    sub: 'Prepared fresh only upon order using non-GMO fresh produce. Never pre-cooked or reheated.',
+    stat: '🔥 100% Fresh Made',
+    tag: 'FARM TO FORK',
+    tagBg: '#F3E8FF',
+    tagColor: '#7E22CE',
+    iconBg: '#FAF5FF',
+    borderGlow: 'rgba(168, 85, 247, 0.25)',
+  },
 ];
 
 // ── Component ──────────────────────────────────────────────────────────────
@@ -248,33 +334,61 @@ export default function HomePage() {
             <div className="banner-wrap">
               <div className="banner-track" ref={bannerRef}>
                 {BANNERS.map(b => (
-                  <div key={b.id} className="banner-slide" onClick={() => navigate('/menu')} style={{ cursor: 'pointer' }}>
-                    <img src={b.image} alt={b.text} className="banner-img" loading="lazy" />
+                  <div
+                    key={b.id}
+                    className="banner-slide"
+                    onClick={() => navigate(b.link)}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <img src={b.image} alt={b.title} className="banner-img" loading="lazy" />
                     <div className="banner-overlay">
-                      <span className="banner-tag">{b.tag}</span>
-                      <h3 className="banner-text">{b.text}</h3>
-                      <p className="banner-sub">{b.subtext}</p>
-                      <span className="banner-cta">Order Now →</span>
+                      <div className="banner-content">
+                        <div className="banner-top-row">
+                          <span className="banner-tag">{b.tag}</span>
+                          <span className="banner-coupon-pill">
+                            Use Code: <strong>{b.coupon}</strong>
+                          </span>
+                        </div>
+                        <h3 className="banner-text">{b.title}</h3>
+                        <p className="banner-sub">{b.subtext}</p>
+                        <div className="banner-bottom-row">
+                          <span className="banner-cta">
+                            {b.cta}
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                              <path d="m9 18 6-6-6-6"/>
+                            </svg>
+                          </span>
+                          <span className="banner-min-order">{b.minOrder}</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 ))}
               </div>
-              {/* Banner Navigation Arrows */}
+
+              {/* Navigation Arrows with Clear Padding */}
               <button
                 className="banner-nav-btn prev"
-                onClick={() => setActiveBanner(b => (b > 0 ? b - 1 : BANNERS.length - 1))}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setActiveBanner(b => (b > 0 ? b - 1 : BANNERS.length - 1));
+                }}
                 aria-label="Previous banner"
               >
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="m15 18-6-6 6-6"/></svg>
               </button>
               <button
                 className="banner-nav-btn next"
-                onClick={() => setActiveBanner(b => (b + 1) % BANNERS.length)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setActiveBanner(b => (b + 1) % BANNERS.length);
+                }}
                 aria-label="Next banner"
               >
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="m9 18 6-6-6-6"/></svg>
               </button>
-              {/* Dots */}
+
+              {/* Dynamic Animated Dots */}
               <div className="banner-dots" aria-label="Banner navigation">
                 {BANNERS.map((_, i) => (
                   <button
@@ -433,28 +547,58 @@ export default function HomePage() {
           <div className="container">
             <div className="trust-wrapper">
               <div className="trust-header">
-                <span className="trust-header-badge">★ QUICKBITE PROMISE</span>
+                <span className="trust-header-badge">★ THE QUICKBITE PROMISE</span>
                 <h2 className="trust-header-title" id="trust-title">Why Food Lovers Trust Us</h2>
-                <p className="trust-header-sub">Top quality food, lightning speed delivery, and guaranteed happiness.</p>
+                <p className="trust-header-sub">
+                  Obsessed with quality, lightning delivery speeds & unforgettable food experiences.
+                </p>
               </div>
-              <div className="trust-grid">
+
+              {/* Bento Grid 4 Pillars */}
+              <div className="trust-bento-grid">
                 {TRUST_ITEMS.map(item => (
-                  <div key={item.id} className="trust-card">
-                    <div className="trust-icon" style={{ background: item.iconBg }}>
-                      <span style={{ fontSize: 24 }}>{item.icon}</span>
-                    </div>
-                    <div className="trust-content">
-                      <div className="trust-top">
-                        <span className="trust-title">{item.title}</span>
-                        <span className="trust-tag" style={{ background: item.tagBg, color: item.tagColor }}>{item.tag}</span>
+                  <div key={item.id} className="trust-bento-card" style={{ borderColor: item.borderGlow }}>
+                    <div className="trust-bento-top">
+                      <div className="trust-bento-icon" style={{ background: item.iconBg }}>
+                        <span>{item.icon}</span>
                       </div>
-                      <p className="trust-sub">{item.sub}</p>
+                      <span className="trust-bento-tag" style={{ background: item.tagBg, color: item.tagColor }}>
+                        {item.tag}
+                      </span>
+                    </div>
+                    <div className="trust-bento-body">
+                      <h3 className="trust-bento-title">{item.title}</h3>
+                      <p className="trust-bento-sub">{item.sub}</p>
+                    </div>
+                    <div className="trust-bento-footer">
+                      <span className="trust-bento-stat">{item.stat}</span>
+                      <span className="trust-bento-verified">✓ Verified Standard</span>
                     </div>
                   </div>
                 ))}
               </div>
-              <div className="trust-footer">
-                Crafted with passion for authentic taste & great memories.
+
+              {/* Trust Live Metrics Bar */}
+              <div className="trust-stats-strip">
+                <div className="trust-stat-col">
+                  <strong>50,000+</strong>
+                  <span>Meals Delivered</span>
+                </div>
+                <div className="trust-stat-sep" />
+                <div className="trust-stat-col">
+                  <strong>4.9 ★</strong>
+                  <span>Average Rating</span>
+                </div>
+                <div className="trust-stat-sep" />
+                <div className="trust-stat-col">
+                  <strong>99.2%</strong>
+                  <span>On-Time Arrival</span>
+                </div>
+                <div className="trust-stat-sep" />
+                <div className="trust-stat-col">
+                  <strong>24 / 7</strong>
+                  <span>Live Support</span>
+                </div>
               </div>
             </div>
           </div>

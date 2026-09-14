@@ -1,0 +1,44 @@
+/* ── Favorites Page ───────────────────────────────────────────────────────── */
+.fav-page { min-height: 100vh; background: var(--color-bg); padding: 40px 0 80px; }
+.fav-body { max-width: 1200px; }
+
+.fav-header { margin-bottom: 32px; }
+.fav-title { font-size: 2rem; font-weight: 900; color: var(--color-text); margin: 0 0 6px; }
+.fav-sub { color: var(--color-text-2); }
+
+.fav-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
+
+.fav-card { border-radius: 18px; overflow: hidden; transition: transform 0.25s, box-shadow 0.25s; cursor: pointer; }
+.fav-card:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(0,0,0,0.12); }
+
+.fav-card-img-wrap { position: relative; height: 180px; overflow: hidden; }
+.fav-card-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.35s; }
+.fav-card:hover .fav-card-img { transform: scale(1.05); }
+
+.fav-dietary { position: absolute; top: 10px; left: 10px; width: 22px; height: 22px; border-radius: 4px; background: #fff; display: flex; align-items: center; justify-content: center; border: 1.5px solid; }
+.fav-dietary.veg { border-color: #22C55E; }
+.fav-dietary.veg .dietary-dot { background: #22C55E; }
+.fav-dietary.non-veg { border-color: #EF4444; }
+.fav-dietary.non-veg .dietary-dot { background: #EF4444; }
+.dietary-dot { width: 10px; height: 10px; border-radius: 50%; }
+
+.fav-rating { position: absolute; top: 10px; right: 44px; background: rgba(0,0,0,0.65); color: #F7D055; font-weight: 700; font-size: 0.75rem; padding: 4px 8px; border-radius: 20px; display: flex; align-items: center; gap: 3px; }
+
+.fav-heart-btn { position: absolute; top: 8px; right: 8px; width: 32px; height: 32px; border-radius: 50%; background: #fff; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.15); transition: transform 0.2s; color: #EF4444; }
+.fav-heart-btn:hover { transform: scale(1.15); }
+
+.fav-card-body { padding: 14px; }
+.fav-card-name { font-weight: 700; color: var(--color-text); font-size: 0.95rem; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fav-card-cat { font-size: 0.78rem; color: var(--color-text-2); margin-bottom: 10px; }
+.fav-card-bottom { display: flex; align-items: center; justify-content: space-between; }
+.fav-card-pricing { display: flex; align-items: baseline; gap: 6px; }
+.fav-price { font-weight: 800; font-size: 1.05rem; color: var(--color-text); }
+.fav-original { font-size: 0.8rem; color: #9CA3AF; text-decoration: line-through; }
+.fav-add-btn { width: 32px; height: 32px; border-radius: 50%; background: var(--color-primary); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #333; transition: transform 0.2s, box-shadow 0.2s; }
+.fav-add-btn:hover { transform: scale(1.1); box-shadow: 0 4px 12px rgba(247,208,85,0.5); }
+
+/* Empty */
+.fav-empty { text-align: center; padding: 80px 20px; }
+.fav-empty-icon { font-size: 4rem; margin-bottom: 16px; }
+.fav-empty h2 { font-size: 1.4rem; color: var(--color-text); margin-bottom: 8px; }
+.fav-empty p { color: var(--color-text-2); margin-bottom: 24px; }
