@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useNavigate, useLocation, useParams, Link } from 'react-router-dom';
 import type { MenuItem } from '../../types';
 import { useCart, getItemKey } from '../../context/CartContext';
@@ -6,6 +6,15 @@ import { useToast } from '../../context/ToastContext';
 import { useFavorites } from '../../context/FavoritesContext';
 import { useAuth } from '../../context/AuthContext';
 import { api } from '../../services/api';
+import {
+  DishShowcase,
+  DishHeaderInfo,
+  QualityBadges,
+  DishAttributes,
+  CustomizationSelector,
+  RatingBreakdown,
+  RelatedProducts,
+} from './components';
 import './FoodDetailPage.css';
 
 const CATEGORY_IMAGES: Record<string, string> = {
@@ -21,43 +30,148 @@ export default function FoodDetailPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const { id } = useParams<{ id: string }>();
+
   const [item, setItem] = useState<MenuItem>((location.state?.item || {}) as MenuItem);
-  const [loading, setLoading] = useState(!location.state?.item);
+  const [loading, setLoading] = useState(false);
+  const [selectedAddOns, setSelectedAddOns] = useState<Record<string, boolean>>({});
+  const [showFullDesc, setShowFullDesc] = useState(false);
+  const [relatedItems, setRelatedItems] = useState<MenuItem[]>([]);
+
   const { addToCart, getItemQuantity, updateQuantity } = useCart();
   const { showToast } = useToast();
   const { isAuthenticated, openAuthModal } = useAuth();
   const { isFavorite, toggleFavorite } = useFavorites();
 
-  const itemId = getItemKey(item);
+  const itemId = getItemKey(item) || id || '';
 
+  // Synchronize item state whenever the URL param :id or location.state changes
   useEffect(() => {
-    if (!item?.name && id) {
-      api.menu.getAll().then(all => {
-        const found = all.find((m: MenuItem) => getItemKey(m) === id);
-        if (found) setItem(found);
-      }).catch(() => {}).finally(() => setLoading(false));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setSelectedAddOns({});
+    setShowFullDesc(false);
+
+    const stateItem = location.state?.item;
+    if (stateItem && (getItemKey(stateItem) === id || !id)) {
+      setItem(stateItem);
+      setLoading(false);
+    } else if (id) {
+      setLoading(true);
+      api.menu
+        .getAll()
+        .then((all) => {
+          const found = all.find((m: MenuItem) => getItemKey(m) === id || m.id === id || (m as any)._id === id);
+          if (found) {
+            setItem(found);
+          }
+        })
+        .catch((err) => {
+          console.error('Failed to load item:', err);
+        })
+        .finally(() => setLoading(false));
     }
-  }, [id, item]);
+  }, [id, location.state]);
+
+  // Fetch Related Suggestions whenever the active item changes
+  useEffect(() => {
+    if (!item?.name) return;
+    const currentKey = getItemKey(item);
+    api.menu
+      .getAll({ category: item.category })
+      .then((catItems) => {
+        const filtered = (catItems || []).filter((m: MenuItem) => getItemKey(m) !== currentKey);
+        if (filtered.length < 3) {
+          api.menu.getAll().then((all) => {
+            const more = (all || []).filter((m: MenuItem) => getItemKey(m) !== currentKey).slice(0, 6);
+            setRelatedItems(more);
+          });
+        } else {
+          setRelatedItems(filtered.slice(0, 6));
+        }
+      })
+      .catch(() => {});
+  }, [item?.name, item?.category, item?.id, (item as any)?._id]);
 
   const defaultImg = (item?.category && CATEGORY_IMAGES[item.category]) || FALLBACK;
   const [imgSrc, setImgSrc] = useState(item?.image || defaultImg);
 
   useEffect(() => {
-    if (item?.image) setImgSrc(item.image);
-    else if (item?.category && CATEGORY_IMAGES[item.category]) setImgSrc(CATEGORY_IMAGES[item.category]);
+    if (item?.image) {
+      setImgSrc(item.image);
+    } else if (item?.category && CATEGORY_IMAGES[item.category]) {
+      setImgSrc(CATEGORY_IMAGES[item.category]);
+    } else {
+      setImgSrc(FALLBACK);
+    }
   }, [item]);
 
   const qty = getItemQuantity(item);
-
   const isFav = isFavorite(itemId);
-  const isVeg = item.isVeg ?? (item.category || '').toLowerCase().includes('veg');
+
+  const isVeg = useMemo(() => {
+    if (item.isVeg !== undefined) return item.isVeg;
+    const name = (item.name || '').toLowerCase();
+    const desc = (item.description || '').toLowerCase();
+    const isNonVeg =
+      name.includes('chicken') ||
+      name.includes('mutton') ||
+      name.includes('fish') ||
+      name.includes('prawn') ||
+      name.includes('egg') ||
+      name.includes('beef') ||
+      name.includes('meat') ||
+      name.includes('pork') ||
+      desc.includes('chicken') ||
+      desc.includes('fish') ||
+      desc.includes('meat') ||
+      desc.includes('pork');
+    return !isNonVeg;
+  }, [item]);
+
+  const handleToggleAddOn = (addOnId: string) => {
+    setSelectedAddOns((prev) => ({
+      ...prev,
+      [addOnId]: !prev[addOnId],
+    }));
+  };
+
+  // Addon price calculation
+  const addOnsTotal = useMemo(() => {
+    return (
+      item?.customizations?.reduce((total, section) => {
+        return (
+          total +
+          section.options.reduce((secTotal, opt) => {
+            return secTotal + (selectedAddOns[opt.id] ? opt.price : 0);
+          }, 0)
+        );
+      }, 0) || 0
+    );
+  }, [item?.customizations, selectedAddOns]);
+
+  const basePrice = item.price || 0;
+  const effectiveUnitPrice = basePrice + addOnsTotal;
 
   const handleAdd = () => {
-    addToCart(item);
+    addToCart({
+      ...item,
+      price: effectiveUnitPrice,
+    });
     showToast(`${item.name} added to cart!`, 'success');
   };
-  const handleIncrease = () => { if (itemId) updateQuantity(itemId, qty + 1); };
-  const handleDecrease = () => { if (itemId) updateQuantity(itemId, qty - 1); };
+
+  const handleIncrease = () => {
+    if (itemId) updateQuantity(itemId, qty + 1);
+  };
+
+  const handleDecrease = () => {
+    if (itemId) updateQuantity(itemId, qty - 1);
+  };
+
+  const handleQuickAddRelated = (relItem: MenuItem) => {
+    addToCart(relItem);
+    showToast(`${relItem.name} added to cart!`, 'success');
+  };
+
   const handleFav = async () => {
     if (!isAuthenticated) {
       showToast('Please log in to save favourites', 'info');
@@ -65,7 +179,10 @@ export default function FoodDetailPage() {
       return;
     }
     const res = await toggleFavorite(item);
-    showToast(res.isFavorite ? 'Saved to Favourites ❤️' : 'Removed from Favourites', res.isFavorite ? 'success' : 'info');
+    showToast(
+      res.isFavorite ? 'Saved to Favourites ❤️' : 'Removed from Favourites',
+      res.isFavorite ? 'success' : 'info'
+    );
   };
 
   if (loading) {
@@ -84,7 +201,9 @@ export default function FoodDetailPage() {
       <main className="fdp-page">
         <div className="container fdp-empty">
           <h2>Item not found</h2>
-          <button className="btn btn-primary" onClick={() => navigate('/menu')}>Browse Menu</button>
+          <button className="btn btn-primary" onClick={() => navigate('/menu')}>
+            Browse Menu
+          </button>
         </div>
       </main>
     );
@@ -101,111 +220,66 @@ export default function FoodDetailPage() {
           {item.category && (
             <>
               <span className="breadcrumb-sep">/</span>
-              <Link to={`/menu?search=${encodeURIComponent(item.category)}`}>{item.category}</Link>
+              <Link to={`/menu?category=${encodeURIComponent(item.category)}`}>{item.category}</Link>
             </>
           )}
           <span className="breadcrumb-sep">/</span>
           <span className="breadcrumb-current">{item.name}</span>
         </nav>
 
-        {/* 2-Column Desktop Showcase Layout */}
+        {/* 2-Column Desktop Showcase Card */}
         <div className="fdp-card-container">
           {/* Left Column: Media Showcase */}
-          <div className="fdp-media-col">
-            <div className="fdp-image-wrap">
-              <img
-                src={imgSrc}
-                alt={item.name}
-                className="fdp-hero-img"
-                onError={() => {
-                  if (imgSrc !== defaultImg) setImgSrc(defaultImg);
-                }}
-              />
-              {/* Back Button */}
-              <button className="fdp-back" onClick={() => navigate(-1)} aria-label="Go back">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="m15 18-6-6 6-6"/></svg>
-              </button>
-              {/* Favorite Button */}
-              <button
-                className={`fdp-fav ${isFav ? 'active' : ''}`}
-                onClick={handleFav}
-                aria-label="Toggle favourite"
-                id="food-detail-fav-btn"
-              >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill={isFav ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2">
-                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                </svg>
-              </button>
-
-              {/* Overlay Badges */}
-              <div className="fdp-hero-badges">
-                <div className={`fdp-dietary ${isVeg ? 'veg' : 'non-veg'}`}>
-                  <div className="dietary-dot" />
-                  <span>{isVeg ? '100% Veg' : 'Non-Veg'}</span>
-                </div>
-                <div className="fdp-rating">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                  {(item.rating || 4.8).toFixed(1)}
-                </div>
-              </div>
-            </div>
-          </div>
+          <DishShowcase
+            item={item}
+            imgSrc={imgSrc}
+            defaultImg={defaultImg}
+            onImgError={() => {
+              if (imgSrc !== defaultImg) setImgSrc(defaultImg);
+            }}
+            isFav={isFav}
+            isVeg={isVeg}
+            onFavClick={handleFav}
+            onBackClick={() => navigate(-1)}
+          />
 
           {/* Right Column: Dish Info & Add-To-Cart */}
           <div className="fdp-info-col">
-            <div className="fdp-header-meta">
-              <div className="fdp-tag-row">
-                {item.category && <span className="fdp-category-badge">{item.category}</span>}
-                <span className="fdp-kitchen-badge">🔥 Prepared Fresh</span>
-              </div>
+            <DishHeaderInfo item={item} effectiveUnitPrice={effectiveUnitPrice} />
 
-              <h1 className="fdp-title">{item.name}</h1>
+            {/* Quality Badges */}
+            <QualityBadges />
 
-              <div className="fdp-pricing-box">
-                <span className="fdp-main-price">₹{item.price?.toFixed(0)}</span>
-                {item.originalPrice && item.originalPrice > item.price && (
-                  <span className="fdp-strike-price">₹{item.originalPrice.toFixed(0)}</span>
-                )}
-                {item.originalPrice && item.originalPrice > item.price && (
-                  <span className="fdp-discount-chip">
-                    {Math.round(((item.originalPrice - item.price) / item.originalPrice) * 100)}% OFF
-                  </span>
-                )}
-              </div>
+            {/* Attributes (Portion • Spice • Calories • ETA) */}
+            <DishAttributes isVeg={isVeg} />
+
+            {/* Description */}
+            <div className="fdp-description-wrap">
+              <h3 className="fdp-section-heading">Description</h3>
+              <p className={`fdp-description ${showFullDesc ? 'expanded' : ''}`}>
+                {item.description ||
+                  'A freshly prepared gourmet specialty cooked with farm-fresh produce and exquisite spices for an authentic taste.'}
+              </p>
+              {(item.description?.length || 0) > 120 && (
+                <button
+                  className="fdp-readmore-btn"
+                  onClick={() => setShowFullDesc(!showFullDesc)}
+                >
+                  {showFullDesc ? 'Read Less ▲' : 'Read More ▼'}
+                </button>
+              )}
             </div>
 
-            <p className="fdp-description">
-              {item.description || 'A freshly prepared gourmet specialty cooked with farm-fresh produce and exquisite spices for an authentic taste.'}
-            </p>
-
-            {/* Delivery Trust Badges */}
-            <div className="fdp-perks-grid">
-              <div className="fdp-perk-item">
-                <span className="perk-icon">⚡</span>
-                <div>
-                  <strong>20–30 Mins</strong>
-                  <span>Express Delivery</span>
-                </div>
-              </div>
-              <div className="fdp-perk-item">
-                <span className="perk-icon">🛡️</span>
-                <div>
-                  <strong>FSSAI Certified</strong>
-                  <span>Safety Sealed Packaging</span>
-                </div>
-              </div>
-              <div className="fdp-perk-item">
-                <span className="perk-icon">🛵</span>
-                <div>
-                  <strong>Free Delivery</strong>
-                  <span>On orders above ₹199</span>
-                </div>
-              </div>
-            </div>
+            {/* Customizations / Add-Ons */}
+            <CustomizationSelector
+              customizations={item.customizations}
+              selectedAddOns={selectedAddOns}
+              onToggleAddOn={handleToggleAddOn}
+            />
 
             <div className="fdp-divider" />
 
-            {/* Interactive Add to Cart / Quantity Bar */}
+            {/* Interactive Add to Cart / Quantity Action */}
             <div className="fdp-action-section">
               {qty === 0 ? (
                 <button
@@ -213,29 +287,73 @@ export default function FoodDetailPage() {
                   className="fdp-add-main-btn"
                   onClick={handleAdd}
                 >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-                  Add to Cart — ₹{item.price?.toFixed(0)}
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                  >
+                    <circle cx="9" cy="21" r="1" />
+                    <circle cx="20" cy="21" r="1" />
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                  </svg>
+                  Add to Cart — ₹{effectiveUnitPrice.toFixed(0)}
                 </button>
               ) : (
                 <div className="fdp-qty-action-row">
                   <div className="fdp-qty-picker">
-                    <button className="fdp-qty-btn decrease" onClick={handleDecrease} id="food-detail-decrease-btn" aria-label="Decrease quantity">−</button>
+                    <button
+                      className="fdp-qty-btn decrease"
+                      onClick={handleDecrease}
+                      id="food-detail-decrease-btn"
+                      aria-label="Decrease quantity"
+                    >
+                      −
+                    </button>
                     <span className="fdp-qty-count">{qty}</span>
-                    <button className="fdp-qty-btn increase" onClick={handleIncrease} id="food-detail-increase-btn" aria-label="Increase quantity">+</button>
+                    <button
+                      className="fdp-qty-btn increase"
+                      onClick={handleIncrease}
+                      id="food-detail-increase-btn"
+                      aria-label="Increase quantity"
+                    >
+                      +
+                    </button>
                   </div>
-                  <button className="fdp-view-cart-btn" onClick={() => navigate('/cart')} id="food-detail-view-cart-btn">
+                  <button
+                    className="fdp-view-cart-btn"
+                    onClick={() => navigate('/cart')}
+                    id="food-detail-view-cart-btn"
+                  >
                     <span>View Cart ({qty})</span>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="m9 18 6-6-6-6"/></svg>
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                    >
+                      <path d="m9 18 6-6-6-6" />
+                    </svg>
                   </button>
                 </div>
               )}
             </div>
 
             <div className="fdp-guarantee-note">
-              <span>🔒 100% Satisfaction Guarantee • Live GPS Tracking</span>
+              <span>🔒 100% Satisfaction Guarantee • Contactless Live Delivery</span>
             </div>
           </div>
         </div>
+
+        {/* Ratings & Customer Reviews Breakdown */}
+        <RatingBreakdown rating={item.rating || 4.8} />
+
+        {/* Frequently Paired With / Related Suggestions */}
+        <RelatedProducts relatedItems={relatedItems} onQuickAdd={handleQuickAddRelated} />
       </div>
     </main>
   );
