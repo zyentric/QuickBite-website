@@ -350,7 +350,14 @@ export default function FoodDetailPage() {
         </div>
 
         {/* Ratings & Customer Reviews Breakdown */}
-        <RatingBreakdown rating={item.rating || 4.8} />
+        <RatingBreakdown
+          rating={item.rating}
+          restaurantId={
+            typeof item.restaurant === 'string'
+              ? item.restaurant
+              : (item.restaurant as any)?._id || (item.restaurant as any)?.id
+          }
+        />
 
         {/* Frequently Paired With / Related Suggestions */}
         <RelatedProducts relatedItems={relatedItems} onQuickAdd={handleQuickAddRelated} />

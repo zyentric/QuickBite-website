@@ -1,9 +1,11 @@
 export interface MenuItem {
+  restaurant: any;
   id: string;
   _id?: string;
   name: string;
   price: number;
   originalPrice?: number;
+  discountPercent?: number;
   discountBadge?: string;
   description: string;
   image?: string;

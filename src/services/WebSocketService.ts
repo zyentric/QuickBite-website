@@ -84,7 +84,7 @@ class WebSocketService {
         try {
           const data = JSON.parse(event.data);
 
-          if (data.type === 'REGISTERED' || data.type === 'PONG') return;
+          if (data.type === 'CONNECTED' || data.type === 'REGISTERED' || data.type === 'PONG') return;
 
           if (data.type === 'CHAT_MESSAGE') {
             const chatMsg = data as ChatSocketMessage;
@@ -101,6 +101,9 @@ class WebSocketService {
             }
             return;
           }
+
+          const validOrderTypes = ['ORDER_PLACED', 'ORDER_STATUS_CHANGED', 'DELIVERY_CLAIMED', 'ORDER_CANCELLED'];
+          if (!validOrderTypes.includes(data.type)) return;
 
           const orderEvent = data as OrderSocketEvent;
 

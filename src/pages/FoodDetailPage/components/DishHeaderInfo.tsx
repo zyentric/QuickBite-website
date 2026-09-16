@@ -8,9 +8,10 @@ interface DishHeaderInfoProps {
 
 export const DishHeaderInfo: React.FC<DishHeaderInfoProps> = ({ item, effectiveUnitPrice }) => {
   const discountPercent =
-    item.originalPrice && item.originalPrice > item.price
+    item.discountPercent ||
+    (item.originalPrice && item.originalPrice > item.price
       ? Math.round(((item.originalPrice - item.price) / item.originalPrice) * 100)
-      : 0;
+      : 0);
 
   const savingsAmount =
     item.originalPrice && item.originalPrice > item.price
@@ -36,7 +37,7 @@ export const DishHeaderInfo: React.FC<DishHeaderInfoProps> = ({ item, effectiveU
           <span className="fdp-strike-price">₹{item.originalPrice.toFixed(0)}</span>
         )}
         {discountPercent > 0 && (
-          <span className="fdp-discount-chip">{discountPercent}% OFF</span>
+          <span className="fdp-discount-chip">{item.discountBadge || `${discountPercent}% OFF`}</span>
         )}
       </div>
     </div>
