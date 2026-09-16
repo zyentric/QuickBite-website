@@ -1,5 +1,5 @@
 export interface MenuItem {
-  restaurant: any;
+  restaurant?: any;
   id: string;
   _id?: string;
   name: string;
