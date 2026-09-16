@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { api } from '../../../services/api';
 
 export interface ReviewItem {
   id: string;
@@ -79,7 +78,13 @@ export const RatingBreakdown: React.FC<RatingBreakdownProps> = ({
         )}
       </div>
 
-      {reviewsList.length > 0 ? (
+      {loading ? (
+        <div className="fdp-empty-reviews" style={{ padding: '32px 16px' }}>
+          <div className="fdp-empty-stars">⏳</div>
+          <h4 className="fdp-empty-title">Loading Reviews...</h4>
+          <p className="fdp-empty-desc">Fetching authentic feedback and customer ratings</p>
+        </div>
+      ) : reviewsList.length > 0 ? (
         <>
           {/* Rating Summary Card */}
           <div className="fdp-rating-summary-card">
